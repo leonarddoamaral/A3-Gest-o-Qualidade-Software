@@ -140,3 +140,8 @@ O projeto utiliza a combinação das metodologias ágeis **Scrum e Kanban** inte
 
 * **RN-03: Cancelamento por condições climáticas adversas**  
   Por se tratar de atividades presenciais ao ar livre em praças e parques, o professor possui permissão para cancelar a aula em caso de chuva ou temperaturas extremas, devendo o sistema notificar imediatamente todos os alunos inscritos.
+
+
+## Fluxo das tela de login e cadastro
+
+![Fluxo tela de login](./Docs/DiagramaLoginCadastro.png)
