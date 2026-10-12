@@ -30,6 +30,12 @@
 
 O projeto consiste no desenvolvimento de um **sistema mobile web** voltado para a terceira idade e pessoas com mobilidade reduzida. A aplicação visa combater o sedentarismo e o isolamento social por meio da prática guiada de exercícios físicos, prioritariamente ao ar livre, além de viabilizar o agendamento de aulas presenciais ministradas por profissionais de educação física em parques e praças públicas e disponibilizar treinos gravados para acesso offline.
 
+### Tecnologias usadas
+
+![springboot](https://www.readmecodegen.com/api/social-icon?name=springboot&size=70)
+![postgresql](https://www.readmecodegen.com/api/social-icon?name=postgresql&size=64)
+![react](https://www.readmecodegen.com/api/social-icon?name=react&size=64)
+
 ### 🌱 Alinhamento Ambiental, Social e ODS (ONU)
 Atendendo às diretrizes da A3 e aos Objetivos de Desenvolvimento Sustentável (ODS) da ONU:
 * **Problema Enfrontado:** Subutilização e degradação de praças e parques urbanos, combinadas ao sedentarismo e isolamento social da população idosa.
@@ -145,3 +151,75 @@ O projeto utiliza a combinação das metodologias ágeis **Scrum e Kanban** inte
 ## Fluxo das tela de login e cadastro
 
 ![Fluxo tela de login](./Docs/DiagramaLoginCadastro.png)
+
+## Prototipagem UI/UX Acessível para Terceira Idade
+
+![Layout Prototipo](./Docs/LayoutPrototipo.png)
+
+
+## Diagram de Casos de Uso
+
+![Diagrama de Casos de Uso](./Docs/Diagrama%20de%20Casos%20de%20Uso.drawio.png)
+
+## Diagram de Classes
+
+![Diagrama de Classes](./Docs/Diagrama%20de%20Classes.drawio.png)
+
+## Estrutura relacional do banco de dados
+
+```sql
+CREATE TABLE Usuario (
+    idUsuario INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    senhaHash VARCHAR(255) NOT NULL,
+    telefone VARCHAR(20),
+    dataNascimento DATE,
+    tipoPerfil VARCHAR(50) NOT NULL 
+);
+
+CREATE TABLE FichaSaude (
+    idFicha INT PRIMARY KEY AUTO_INCREMENT,
+    doresPeitoTontura BOOLEAN,
+    historicoQuedas BOOLEAN,
+    problemasArticulacoes BOOLEAN,
+    nomeContatoEmergencia VARCHAR(255),
+    telefoneEmergencia VARCHAR(20),
+    idUsuario INT UNIQUE NOT NULL, -- FK e restrição de unicidade para relação 1:1
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario) ON DELETE CASCADE
+);
+
+CREATE TABLE Local (
+    idLocal INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(255) NOT NULL,
+    tipo VARCHAR(100),
+    endereco TEXT NOT NULL,
+    latitude DOUBLE,
+    longitude DOUBLE,
+    pontoEncontro VARCHAR(255)
+);
+
+CREATE TABLE Aula (
+    idAula INT PRIMARY KEY AUTO_INCREMENT,
+    titulo VARCHAR(255) NOT NULL,
+    dataHoraInicio DATETIME NOT NULL,
+    dataHoraFim DATETIME NOT NULL,
+    vagasMaximas INT NOT NULL,
+    statusCancelada BOOLEAN DEFAULT FALSE,
+    idInstrutor INT NOT NULL, -- FK referenciando quem ministra (Usuario)
+    idLocal INT NOT NULL, -- FK referenciando onde ocorre (Local)
+    FOREIGN KEY (idInstrutor) REFERENCES Usuario(idUsuario),
+    FOREIGN KEY (idLocal) REFERENCES Local(idLocal)
+);
+
+CREATE TABLE Agendamento (
+    idAgendamento INT PRIMARY KEY AUTO_INCREMENT,
+    dataSolicitacao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50) NOT NULL, -- Ex: 'Pendente', 'Confirmado', 'Cancelado'
+    presencaConfirmada BOOLEAN DEFAULT FALSE,
+    idUsuario INT NOT NULL, -- FK referenciando quem realiza o agendamento (Idoso)
+    idAula INT NOT NULL, -- FK referenciando a Aula agendada
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
+    FOREIGN KEY (idAula) REFERENCES Aula(idAula)
+);
+````
