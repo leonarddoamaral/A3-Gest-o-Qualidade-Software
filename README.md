@@ -223,3 +223,4 @@ CREATE TABLE Agendamento (
     FOREIGN KEY (idAula) REFERENCES Aula(idAula)
 );
 ````
+
