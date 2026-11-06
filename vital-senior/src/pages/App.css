@@ -1,3 +1,150 @@
-h1{
-  color: #000;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+
+:root {
+  --color-primary: #FF6B35;
+  --color-primary-hover: #E55A2A;
+  --color-card-bg: #E6F7F5;
+  --color-card-bar: #007D83;
+  --color-card-text: #004A4D;
+  --color-text-gray: #64748B;
+  --font-main: 'Inter', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: #f1f5f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* --- Contentor Principal (Mobile First) --- */
+.app-container {
+  width: 100%;
+  height: 100dvh; /* Ocupa 100% da altura visível no celular */
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto; /* Permite scroll se a tela for muito pequena */
+}
+
+/* --- Media Query para PC e Tablets --- */
+@media (min-width: 600px) {
+  .app-container {
+    max-width: 390px; /* Trava na largura do design original do Figma */
+    height: 877px;
+    max-height: 95vh; /* Impede que corte a tela em monitores mais baixos */
+    border-radius: 40px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* --- Secção Superior (Hero) --- */
+.hero-section {
+  position: relative;
+  height: 55%;
+  min-height: 350px; /* Garante que a imagem não esmague o texto em telas pequenas */
+  width: 100%;
+  background-image: url('../assets/telainicialIMG.jpg');
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 40%, rgba(0,0,0,0.8) 100%);
+}
+
+.top-bar {
+  position: absolute;
+  top: 32px;
+  left: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
+}
+
+.logo-wrapper {
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+}
+
+.icon-white {
+  color: #ffffff;
+}
+
+.app-name {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 20px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-text {
+  position: absolute;
+  bottom: 32px;
+  left: 24px;
+  right: 24px;
+  color: #ffffff;
+  z-index: 10;
+}
+
+.subtitle {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.main-title {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.1;
+  text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* --- Secção Inferior (Conteúdo) --- */
+.content-section {
+  flex: 1;
+  padding: 40px 24px 48px 24px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  z-index: 10;
+}
+
+.content-top {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.description {
+  text-align: center;
+  color: var(--color-text-gray);
+  font-size: 17px;
+  line-height: 1.6;
+  font-weight: 500;
+  padding: 0 8px;
 }

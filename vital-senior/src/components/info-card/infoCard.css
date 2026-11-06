@@ -1,0 +1,22 @@
+.info-card {
+  background-color: var(--color-card-bg);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+}
+
+.info-bar {
+  width: 6px;
+  background-color: var(--color-card-bar);
+  border-radius: 9999px;
+}
+
+.info-text {
+  color: var(--color-card-text);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 4px 8px 4px 0;
+  line-height: 1.4;
+}
