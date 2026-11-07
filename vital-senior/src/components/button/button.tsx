@@ -6,7 +6,6 @@ function Button(props: { text: string ;icon?: React.ReactNode ;link: string }) {
     <Link to={props.link}>
     <button className="btn-primary">
       {props.icon}
-     
         {props.text}
       </button>
       </Link>

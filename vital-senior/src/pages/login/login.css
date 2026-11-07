@@ -1,0 +1,95 @@
+/* --- Cabeçalho Interno --- */
+.login-header {
+  padding: 32px 24px 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: #ffffff;
+}
+
+.back-button {
+  background-color: #f1f5f9;
+  border: none;
+  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: var(--color-text-gray);
+  transition: background-color 0.2s;
+}
+
+.back-button:hover {
+  background-color: #e2e8f0;
+}
+
+.app-name-dark {
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--color-card-text);
+}
+
+/* --- Conteúdo de Login --- */
+.login-content {
+  flex: 1;
+  padding: 24px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-headings {
+  margin-bottom: 40px;
+  margin-top: 16px;
+}
+
+.login-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+
+.login-subtitle {
+  font-size: 16px;
+  color: var(--color-text-gray);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+/* --- Formulário e Inputs --- */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+}
+
+/* --- Links Auxiliares --- */
+.forgot-password {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-card-bar); /* Verde escuro do tema */
+  text-decoration: none;
+  text-align: right;
+  margin-top: -8px;
+  margin-bottom: 8px;
+}
+
+.register-prompt {
+  text-align: center;
+  font-size: 15px;
+  color: var(--color-text-gray);
+  margin-top: 32px;
+  font-weight: 500;
+}
+
+.register-prompt a {
+  color: var(--color-primary);
+  font-weight: 800;
+  text-decoration: none;
+  margin-left: 4px;
+}
