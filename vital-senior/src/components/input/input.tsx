@@ -1,6 +1,6 @@
 import './input.css'
 
-function Input(props: { type: string; id: string; placeholder: string; text: string }) {
+function Input(props: { type: string; id: string; placeholder: string; text: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) {
     return (
         <div className="input-group">
             <label htmlFor={props.id}>{props.text}</label>
@@ -9,6 +9,7 @@ function Input(props: { type: string; id: string; placeholder: string; text: str
               id={props.id}
               placeholder={props.placeholder}
               required
+              onChange={props.onChange}
             />
           </div>
     )
