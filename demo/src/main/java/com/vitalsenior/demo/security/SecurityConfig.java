@@ -31,6 +31,7 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/vitalsenior/usuario").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/vitalsenior/usuario/login").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/vitalsenior/usuario/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

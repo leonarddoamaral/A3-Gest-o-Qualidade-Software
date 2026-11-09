@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.tsx'
 import Login from './login/login.tsx'
 import CadastroUsuario from './cadastro/cadastroUsuario.tsx'
+import Home from './home/home.tsx'
 
 function NotFound() {
   return (
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
   {path: '/', element: <App />},
   {path: '/login', element: <Login />},
   {path: '/cadastro', element: <CadastroUsuario />},
+  {path: '/home', element: <Home />},
   {path: '*', element: <NotFound />},
 ])
 

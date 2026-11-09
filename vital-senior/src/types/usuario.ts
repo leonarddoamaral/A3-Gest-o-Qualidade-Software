@@ -12,6 +12,15 @@ export type DadosCadastroUsuario = {
     senhaHash: string;
 };
 
+export type DadosListagemUsuario = {
+    id: number;
+    nome: string;
+    email: string;
+    telefone: string;
+    dataNascimento: string;
+    tipoPerfil: string;
+};
+
 export type Usuario = {
     id: number;
     nome: string;
@@ -21,4 +30,6 @@ export type Usuario = {
     tipoPerfil: string;
     senhaHash: string;
 }; 
+
+
 

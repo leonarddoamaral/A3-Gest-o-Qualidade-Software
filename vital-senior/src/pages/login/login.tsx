@@ -11,8 +11,7 @@ import { loginUsuario } from '../../API/apiUsuario';
   const [error, setError] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
-
-  const handleLogin = async (e: React.FormEvent) => {
+const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -24,9 +23,13 @@ import { loginUsuario } from '../../API/apiUsuario';
     }
 
     try {
-      const response = await loginUsuario({ email, senha });
-      console.log('Login bem-sucedido:', response);
-      navigate('/dashboard'); 
+      const usuarioLogado = await loginUsuario({ email, senha });
+      
+      // GUARDA O ID NA MEMÓRIA DO NAVEGADOR
+      localStorage.setItem('userId', usuarioLogado.id.toString());
+      
+      console.log('Login bem-sucedido:', usuarioLogado);
+      navigate('/home'); 
       
     } catch (error) {
       console.error('Erro ao fazer login:', error);
@@ -34,7 +37,7 @@ import { loginUsuario } from '../../API/apiUsuario';
     } finally {
       setLoading(false);
     }
-  };
+};
 
   return (
     <>
