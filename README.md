@@ -12,10 +12,10 @@
 | Nome | RA | Responsabilidade Principal |
 |------|----|----------------------------|
 | **Leonardo do Amaral Quinquio** | *824143195* | Modelagem e Implementação de Software[cite: 2] |
-| **Luighi Cordeiro Gaspareto** | *[Insira o RA]* | Documentação do Sistema e Engenharia de Requisitos[cite: 2] |
-| **Henrique Matias de Oliveira** | *[Insira o RA]* | Documentação, Gerenciamento de Projeto e Requisitos[cite: 2] |
-| **Enzo Yukio Yoshida** | *[Insira o RA]* | Modelagem de Software e Implementação[cite: 2] |
-| **Guilherme Sales de Andrade** | *[Insira o RA]* | Engenharia de Requisitos e Implementação[cite: 2] |
+| **Luighi Cordeiro Gaspareto** | *824117584* | Documentação do Sistema e Engenharia de Requisitos[cite: 2] |
+| **Henrique Matias de Oliveira** | *824130738* | Documentação, Gerenciamento de Projeto e Requisitos[cite: 2] |
+| **Enzo Yukio Yoshida** | *8261105032* | Modelagem de Software e Implementação[cite: 2] |
+| **Guilherme Sales de Andrade** | *825125938* | Engenharia de Requisitos e Implementação[cite: 2] |
 
 ---
 
