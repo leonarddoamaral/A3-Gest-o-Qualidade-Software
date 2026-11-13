@@ -1,0 +1,217 @@
+/* --- Contentor Principal --- */
+.agendar-container {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================
+   SECÇÃO DO MAPA (OpenLayers)
+   ========================================= */
+.map-section {
+  position: relative;
+  height: 400px;
+  flex-shrink: 0;
+}
+
+/* Contentor do mapa injetado via JS */
+.ol-map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* O mapa fica por baixo */
+}
+
+/* Camada que flutua sobre o mapa */
+.map-ui-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 100%);
+}
+
+.agendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px 16px 24px;
+}
+
+.back-link {
+  position: absolute;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  color: #007D83;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.agendar-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #004A4D;
+}
+
+.search-bar-wrapper {
+  margin: 16px 24px;
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.search-icon {
+  color: #94a3b8;
+  margin-right: 12px;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  font-family: inherit;
+  color: #0f172a;
+  background-color: transparent;
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+/* Botão Você (Localização) */
+.user-location-btn {
+  position: absolute;
+  z-index: 10;
+  bottom: 40px;
+  right: 24px;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  color: #004A4D;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+/* O resto do CSS (locations-section) permanece igual ao código anterior */
+.locations-section {
+  flex: 1;
+  background-color: #ffffff;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  margin-top: -24px; 
+  z-index: 20;
+  position: relative;
+  padding: 32px 24px 100px 24px;
+  overflow-y: auto;
+}
+/* ... (mantenha a secção da lista de cartões idêntica) ... */
+.locations-section {
+  flex: 1;
+  background-color: #ffffff;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  margin-top: -24px; /* Sobrepõe o mapa */
+  z-index: 20;
+  position: relative;
+  padding: 32px 24px 100px 24px;
+  overflow-y: auto;
+}
+
+.locations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.locations-header h2 {
+  font-size: 18px;
+  font-weight: 800;
+  color: #004A4D;
+}
+
+.distance-badge {
+  background-color: #E6F7F5;
+  color: #007D83;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Cartões de Local */
+.locations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.location-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.location-card:active {
+  transform: scale(0.98);
+  border-color: #007D83;
+}
+
+.loc-icon-wrapper {
+  background-color: #E6F7F5;
+  color: #007D83;
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loc-info {
+  flex: 1;
+}
+
+.loc-info h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.loc-info p {
+  font-size: 13px;
+  color: #64748B;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.loc-spots {
+  font-size: 13px;
+  font-weight: 700;
+  color: #16A34A; /* Verde para destacar vagas */
+}
+
+.loc-chevron {
+  color: #cbd5e1;
+}

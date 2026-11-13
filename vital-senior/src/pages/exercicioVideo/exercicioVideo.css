@@ -1,0 +1,134 @@
+/* --- Contentor Principal --- */
+.exercicio-container {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Cabeçalho --- */
+.exercicio-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px 16px 24px;
+  position: relative;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.back-link {
+  position: absolute;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  color: #007D83;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.exercicio-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #004A4D;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* --- Conteúdo Principal --- */
+.exercicio-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 100px; /* Espaço para o MenuBar */
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Contentor do YouTube (Truque do Rácio 16:9) --- */
+.video-iframe-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio (9 / 16 = 0.5625) */
+  height: 0;
+  background-color: #000000; /* Fundo preto enquanto carrega */
+}
+
+.youtube-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* --- Detalhes do Vídeo (Título e Coração) --- */
+.video-info-section {
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.video-text-group h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #004A4D;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.video-text-group p {
+  font-size: 14px;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.favorite-btn {
+  background-color: #FFF0E6; /* Fundo laranja clarinho */
+  border: none;
+  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.favorite-btn:active {
+  transform: scale(0.92);
+}
+
+/* Quando favoritado, intensificamos o fundo */
+.favorite-btn.active {
+  background-color: #FFE1D1;
+}
+
+/* --- Caixa de Aviso Médico --- */
+.warning-banner {
+  margin: 0 24px 24px 24px;
+  background-color: #E6F7F5; /* Verde cyan bem claro */
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.warning-icon-wrapper {
+  color: #007D83;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.warning-banner p {
+  color: #004A4D;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}

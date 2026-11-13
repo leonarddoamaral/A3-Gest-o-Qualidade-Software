@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { 
   CalendarCheck, 
   BarChart2, 
   PlayCircle, 
-  Home as HomeIcon, 
-  Calendar, 
-  PlaySquare 
 } from 'lucide-react';
 import './home.css';
 import ActionCard from '../../components/action-card/action-card';
 import { buscarUsuarioPorId } from '../../API/apiUsuario';
+import MenuBar from '../../components/menu-bar/menuBar';
 
 function Home() {
   // Estado tipado para evitar erros de 'undefined' no HTML
@@ -79,17 +76,10 @@ function Home() {
         <div className="action-list">
             <ActionCard
               title="AULAS HOJE"
-              description="2 atividades programadas"
+              description="Ver atividades programadas"
               icon={<CalendarCheck size={24} />}
-              link="/aulas"
+              link="/minhas-aulas"
               cor='icon-green'
-            />
-            <ActionCard 
-                title="MEU PROGRESSO"
-                description="Você se movimentou 4 d..."
-                icon={<BarChart2 size={24} />}
-                link="/progresso"
-                cor='icon-orange'
             />
             <ActionCard 
                 title="VÍDEOS GRAVADOS"
@@ -99,35 +89,9 @@ function Home() {
                 cor='icon-blue'
             />
         </div>
-
-        {/* Cartão de Destaque - Próxima Aula */}
-        <div className="highlight-card">
-          <div className="highlight-date">
-            <span className="date-day">14</span>
-            <span className="date-month">OUT</span>
-          </div>
-          <div className="highlight-info">
-            <span className="highlight-badge">Próxima aula</span>
-            <h3 className="highlight-title">Alongamento • 09:00</h3>
-          </div>
-        </div>
       </section>
 
-      {/* Barra de Navegação Inferior */}
-      <nav className="bottom-nav">
-        <Link to="/home" className="nav-item active">
-          <HomeIcon size={22} />
-          <span>Início</span>
-        </Link>
-        <Link to="/agenda" className="nav-item">
-          <Calendar size={22} />
-          <span>Agenda</span>
-        </Link>
-        <Link to="/videos" className="nav-item">
-          <PlaySquare size={22} />
-          <span>Vídeos</span>
-        </Link>
-      </nav>
+      <MenuBar activePage="home" />
 
     </main>
   );

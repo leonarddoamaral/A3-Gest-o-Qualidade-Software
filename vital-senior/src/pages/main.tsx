@@ -6,6 +6,13 @@ import App from './App.tsx'
 import Login from './login/login.tsx'
 import CadastroUsuario from './cadastro/cadastroUsuario.tsx'
 import Home from './home/home.tsx'
+import Agenda from './agenda/Agenda.tsx'
+import AgendarAula from './agendar-aula/agendarAula.tsx'
+import ConfirmarAula from './ConfirmarAula/ConfirmarAula.tsx'
+import Videos from './videos/videos.tsx'
+import ExercicioVideo from './exercicioVideo/ExercicioVideo.tsx'
+import FichaSaude from './Fichasaude/ficha.tsx'
+import MinhasAulas from './minhasAulas/minhasAulas.tsx'
 
 function NotFound() {
   return (
@@ -22,6 +29,14 @@ const router = createBrowserRouter([
   {path: '/login', element: <Login />},
   {path: '/cadastro', element: <CadastroUsuario />},
   {path: '/home', element: <Home />},
+  {path: '/agenda', element: <Agenda />},
+  {path: '/agendar-aula', element: <AgendarAula />},
+  {path: '/confirmar-aula', element: <ConfirmarAula />},
+  {path: '/videos', element: <Videos />},
+  {path: '/video/:id', element: <ExercicioVideo /> }, 
+  {path: '/minhas-aulas', element: <MinhasAulas />},
+  {path: '/cadastro/ficha-saude', element: <FichaSaude />},
+    // Rota para exibir vídeo específico
   {path: '*', element: <NotFound />},
 ])
 
