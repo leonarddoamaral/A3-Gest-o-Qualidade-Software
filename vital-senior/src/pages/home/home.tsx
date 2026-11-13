@@ -75,7 +75,7 @@ function Home() {
         {/* Lista de Ações */}
         <div className="action-list">
             <ActionCard
-              title="AULAS HOJE"
+              title="AULAS"
               description="Ver atividades programadas"
               icon={<CalendarCheck size={24} />}
               link="/minhas-aulas"
