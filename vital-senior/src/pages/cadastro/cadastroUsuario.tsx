@@ -47,7 +47,7 @@ function CadastroUsuario() {
       if (tipoPerfil === 'ALUNO') {
         navigate('/cadastro/ficha-saude');
       } else {
-        navigate('/home');
+        navigate('/login');
       }
     } catch (err) {
       console.error('Erro ao cadastrar usuário:', err);

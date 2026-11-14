@@ -14,6 +14,8 @@ import ExercicioVideo from './exercicioVideo/ExercicioVideo.tsx'
 import FichaSaude from './Fichasaude/ficha.tsx'
 import MinhasAulas from './minhasAulas/minhasAulas.tsx'
 import AvaliarAula from './avaliar-aula/AvaliarAula.tsx'
+import CadastrarAulasProfessor from './professor/CadastrarAulasProfessor.tsx'
+import MinhasAulasProfessor from './professor/minhasAulasProfessor.tsx'
 
 function NotFound() {
   return (
@@ -37,7 +39,9 @@ const router = createBrowserRouter([
   {path: '/video/:id', element: <ExercicioVideo /> }, 
   {path: '/minhas-aulas', element: <MinhasAulas />},
   {path: '/cadastro/ficha-saude', element: <FichaSaude />},
-  {path:'minhas-aulas/avaliar/:id', element: <AvaliarAula />},
+  {path:'minhas-aulas/avaliar/:idAgendamento', element: <AvaliarAula />},
+  {path: '/professor/cadastrar-aula', element: <CadastrarAulasProfessor />},
+  {path: '/professor/minhas-aulas', element: <MinhasAulasProfessor />},
     // Rota para exibir vídeo específico
   {path: '*', element: <NotFound />},
 ])

@@ -1,0 +1,184 @@
+.prof-container {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.prof-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px 16px 24px;
+  position: relative;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.prof-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #004A4D;
+  letter-spacing: 0.5px;
+}
+
+.prof-content {
+  flex: 1;
+  padding: 24px 24px 110px 24px;
+  overflow-y: auto;
+}
+
+.prof-top-action {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.prof-top-action h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #004A4D;
+}
+
+.prof-top-action p {
+  font-size: 14px;
+  color: #64748B;
+}
+
+.prof-aulas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.prof-aula-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 18px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.prof-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.prof-card-top h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.prof-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.badge-ativa {
+  background-color: #DCFCE7;
+  color: #16A34A;
+}
+
+.badge-cancelada {
+  background-color: #FEE2E2;
+  color: #DC2626;
+}
+
+.prof-info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.prof-card-actions {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.prof-cancel-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #FEF2F2;
+  color: #DC2626;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* --- Formulário CadastrarAula --- */
+.aula-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.map-picker-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.map-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.map-picker-header label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #004A4D;
+}
+
+.gps-mini-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #E6F7F5;
+  color: #007D83;
+  border: none;
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mini-ol-map {
+  width: 100%;
+  height: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid #e2e8f0;
+}
+
+.coords-feedback {
+  font-size: 12px;
+  color: #64748B;
+}

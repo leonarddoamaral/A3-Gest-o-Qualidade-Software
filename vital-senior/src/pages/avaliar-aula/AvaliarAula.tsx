@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ChevronLeft, Star, CheckCircle, AlertCircle } from 'lucide-react';
+import { ChevronLeft, Star, CheckCircle } from 'lucide-react';
 import Button from '../../components/button/button';
+import Input from '../../components/input/input';
 import MenuBar from '../../components/menu-bar/menuBar';
 import { cadastrarAvaliacao } from '../../API/apiAvaliacao';
 import './avaliarAula.css';
@@ -52,12 +53,11 @@ export default function AvaliarAula() {
           <ChevronLeft size={20} />
           <span>Minhas Aulas</span>
         </Link>
-        
       </header>
 
       <section className="avaliar-content">
         <form className="avaliar-form" onSubmit={handleSubmit}>
-          {/* Bloco 1: Nota da Experiência (Estrelas grandes para toque fácil) */}
+          {/* Bloco 1: Nota da Experiência */}
           <div className="rating-card">
             <h2>Como foi sua experiência na aula?</h2>
             <p>Toque nas estrelas para dar sua nota</p>
@@ -109,19 +109,14 @@ export default function AvaliarAula() {
             </div>
           </div>
 
-          {/* Bloco 3: Relato de Problemas / Observações */}
+          {/* Bloco 3: Input Padrão para Relato/Comentário */}
           <div className="rating-card">
-            <label htmlFor="relatoProblema" className="textarea-label">
-              <AlertCircle size={18} color="#007D83" />
-              <span>Sentiu algum desconforto ou quer deixar um comentário?</span>
-            </label>
-            <textarea
+            <Input
+              type="text"
               id="relatoProblema"
-              rows={4}
-              placeholder="Ex: Achei o ritmo ótimo, ou senti um leve cansaço nos joelhos..."
-              value={relatoProblema}
+              text="Sentiu algum desconforto ou quer deixar um comentário?"
+              placeholder="Ex: Achei o ritmo ótimo, ou senti cansaço nos joelhos..."
               onChange={(e) => setRelatoProblema(e.target.value)}
-              className="avaliar-textarea"
             />
           </div>
 

@@ -75,7 +75,7 @@ function FichaSaude() {
     <main className="app-container">
       {/* Cabeçalho de Navegação */}
       <header className="cadastro-header">
-        <Link to="/home" className="back-button" aria-label="Voltar">
+        <Link to="/login" className="back-button" aria-label="Voltar">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
