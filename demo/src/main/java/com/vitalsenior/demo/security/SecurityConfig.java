@@ -32,6 +32,12 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/vitalsenior/usuario").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/vitalsenior/usuario/login").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/vitalsenior/usuario/**").permitAll()
+                        .requestMatchers("/vitalsenior/fichasaude/**").permitAll()
+                        .requestMatchers("/vitalsenior/locais/**").permitAll()
+                        .requestMatchers("/vitalsenior/aulas/**").permitAll()
+                        .requestMatchers("/vitalsenior/agendamentos/**").permitAll()
+                        .requestMatchers("/vitalsenior/exercicios/**").permitAll()
+                        .requestMatchers("/vitalsenior/avaliacoes/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

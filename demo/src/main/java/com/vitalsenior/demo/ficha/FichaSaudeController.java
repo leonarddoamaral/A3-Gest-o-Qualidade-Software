@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/vitalsenior/fichasaude")
+@CrossOrigin(origins = "*")
 public class FichaSaudeController {
 
     @Autowired

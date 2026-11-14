@@ -3,164 +3,196 @@ import { HeartPulse, Calendar as CalendarIcon, MapPin, Clock } from 'lucide-reac
 import { Link } from 'react-router-dom';
 import Button from '../../components/button/button';
 import MenuBar from '../../components/menu-bar/menuBar';
+import { listarAulas } from '../../API/apiAula';
+import { listarAgendamentosPorAluno } from '../../API/apiAgendamento';
+import type { DadosListagemAula } from '../../types/aula';
 import './Agenda.css';
 
 // --- Funções Auxiliares de Data --- //
-
-// Array para traduzir o dia da semana retornado pelo Date (0 a 6) para a sigla
 const diasSemanaNomes = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB'];
 
-// Retorna uma string "DiaDaSemana-feira, Dia de Mês"
 const formatarDataExtensa = (data: Date) => {
-   const opcoesDia = { weekday: 'long' } as const;
-   const opcoesMes = { day: 'numeric', month: 'long' } as const;
+  const opcoesDia = { weekday: 'long' } as const;
+  const opcoesMes = { day: 'numeric', month: 'long' } as const;
 
-   // "quarta-feira"
-   let diaSemana = data.toLocaleDateString('pt-BR', opcoesDia);
-   diaSemana = diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
+  let diaSemana = data.toLocaleDateString('pt-BR', opcoesDia);
+  diaSemana = diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
 
-   // "14 de outubro"
-   const diaMes = data.toLocaleDateString('pt-BR', opcoesMes);
+  const diaMes = data.toLocaleDateString('pt-BR', opcoesMes);
 
-   return `${diaSemana}, ${diaMes}`;
+  return `${diaSemana}, ${diaMes}`;
+};
+
+// Extrai YYYY-MM-DD respeitando o fuso horário local
+const formatarParaISOLocal = (data: Date) => {
+  const ano = data.getFullYear();
+  const mes = String(data.getMonth() + 1).padStart(2, '0');
+  const dia = String(data.getDate()).padStart(2, '0');
+  return `${ano}-${mes}-${dia}`;
 };
 
 export default function Agenda() {
+  const { diasSemana, diaAtualStr } = useMemo(() => {
+    const hoje = new Date();
+    const dataDeHojeStr = formatarParaISOLocal(hoje);
+    const diasGerados = [];
 
-   // Memoiza os dias gerados para não recalcular a cada clique num separador
-   const { diasSemana, diaAtualStr } = useMemo(() => {
-      const hoje = new Date();
-      const dataDeHojeStr = hoje.toISOString().split('T')[0]; // ex: "2026-11-13"
+    for (let i = -2; i <= 2; i++) {
+      const dataIteracao = new Date();
+      dataIteracao.setDate(hoje.getDate() + i);
 
-      const diasGerados = [];
+      const sigla = i === 0 ? 'HOJE' : diasSemanaNomes[dataIteracao.getDay()];
 
-      // Gerar 5 dias: 2 antes de hoje, Hoje, e 2 depois de hoje
-      for (let i = -2; i <= 2; i++) {
-         const dataIteracao = new Date();
-         dataIteracao.setDate(hoje.getDate() + i);
+      diasGerados.push({
+        sigla,
+        data: dataIteracao.getDate().toString(),
+        dataCompletaISO: formatarParaISOLocal(dataIteracao),
+        objData: dataIteracao,
+      });
+    }
 
-         const sigla = i === 0 ? 'HOJE' : diasSemanaNomes[dataIteracao.getDay()];
+    return {
+      diasSemana: diasGerados,
+      diaAtualStr: dataDeHojeStr,
+    };
+  }, []);
 
-         diasGerados.push({
-            sigla: sigla,
-            // Guardamos o número do dia (ex: '14')
-            data: dataIteracao.getDate().toString(),
-            // Guardamos a data completa para referência interna (Y-M-D)
-            dataCompletaISO: dataIteracao.toISOString().split('T')[0],
-            // Objeto date para poder formatar o texto longo depois
-            objData: dataIteracao
-         });
+  const [diaAtivoISO, setDiaAtivoISO] = useState(diaAtualStr);
+  const [aulas, setAulas] = useState<DadosListagemAula[]>([]);
+  const [aulasConfirmadasIds, setAulasConfirmadasIds] = useState<number[]>([]);
+  const [carregando, setCarregando] = useState(true);
+
+  useEffect(() => {
+    async function carregarDados() {
+      try {
+        const todasAulas = await listarAulas();
+        // Mantém apenas aulas ativas (não canceladas)
+        setAulas(todasAulas.filter((a) => a.status !== 'CANCELADA'));
+
+        // Verifica em quais aulas o aluno logado já está inscrito
+        const userId = localStorage.getItem('userId');
+        if (userId) {
+          const agendamentos = await listarAgendamentosPorAluno(Number(userId));
+          const idsConfirmados = agendamentos
+            .filter((ag) => ag.statusAgendamento === 'CONFIRMADO')
+            .map((ag) => ag.aula.idAula);
+          setAulasConfirmadasIds(idsConfirmados);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar agenda:', error);
+      } finally {
+        setCarregando(false);
       }
+    }
 
-      return {
-         diasSemana: diasGerados,
-         diaAtualStr: dataDeHojeStr
-      };
-   }, []);
+    carregarDados();
+  }, []);
 
-   // O estado agora guarda a data ISO inteira (ex: "2026-11-13") para evitar conflitos (ex: dia 14 deste mês e dia 14 do próximo)
-   const [diaAtivoISO, setDiaAtivoISO] = useState(diaAtualStr);
+  const diaSelecionado = diasSemana.find((d) => d.dataCompletaISO === diaAtivoISO);
+  const dataExtensa = diaSelecionado ? formatarDataExtensa(diaSelecionado.objData) : '';
 
-   // Encontra o objeto do dia selecionado para mostrar o texto extenso corretamente
-   const diaSelecionado = diasSemana.find(d => d.dataCompletaISO === diaAtivoISO);
-   const dataExtensa = diaSelecionado ? formatarDataExtensa(diaSelecionado.objData) : '';
+  // Filtra as aulas do banco pelo dia selecionado no carrossel
+  const aulasDoDia = aulas
+    .filter((aula) => aula.dataHoraInicio.startsWith(diaAtivoISO))
+    .sort((a, b) => a.dataHoraInicio.localeCompare(b.dataHoraInicio));
 
-   // Dados estáticos das aulas
-   const aulasHoje = [
-      {
-         horario: '09:00',
-         titulo: 'Alongamento suave',
-         local: 'Praça das Flores - Prof. Ana',
-         badge: 'Confirmada',
-         tipoBadge: 'sucesso'
-      },
-      {
-         horario: '11:00',
-         titulo: 'Equilíbrio e postura',
-         local: 'Online ao vivo - Prof. Carlos',
-         badge: 'Entrar na aula',
-         tipoBadge: 'acao'
-      },
-      {
-         horario: '16:00',
-         titulo: 'Caminhada orientada',
-         local: 'Parque da Aclimação - Prof. J...',
-         badge: '3 vagas',
-         tipoBadge: 'vagas'
-      }
-   ];
+  return (
+    <main className="app-container agenda-container">
+      {/* Cabeçalho da Agenda */}
+      <header className="agenda-header">
+        <div className="agenda-title-wrapper">
+          <div className="agenda-icon">
+            <HeartPulse size={26} strokeWidth={2.5} />
+          </div>
+          <h1 className="agenda-title">AULAS DA SEMANA</h1>
+        </div>
+      </header>
 
-   return (
-      <>
-         <main className="app-container agenda-container">
-            {/* Cabeçalho da Agenda */}
-            <header className="agenda-header">
-               <div className="agenda-title-wrapper">
-                  <div className="agenda-icon">
-                     <HeartPulse size={26} strokeWidth={2.5} />
+      {/* Conteúdo Principal */}
+      <section className="agenda-content">
+        {/* Seletor de Dias da Semana */}
+        <div className="week-selector">
+          {diasSemana.map((dia, index) => (
+            <div
+              key={index}
+              className={`day-card ${diaAtivoISO === dia.dataCompletaISO ? 'active' : ''}`}
+              onClick={() => setDiaAtivoISO(dia.dataCompletaISO)}
+            >
+              <span className="day-str">{dia.sigla}</span>
+              <span className="day-num">{dia.data}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Data Atual por extenso */}
+        <div className="current-date-label">
+          <CalendarIcon size={20} />
+          <span>{dataExtensa}</span>
+        </div>
+
+        {/* Lista de Aulas Dinâmica */}
+        <div className="class-list">
+          {carregando ? (
+            <p style={{ textAlign: 'center', color: '#64748B', padding: '20px 0' }}>
+              Carregando aulas...
+            </p>
+          ) : (
+            aulasDoDia.map((aula) => {
+              const horarioFormatado = new Date(aula.dataHoraInicio).toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit',
+              });
+              const jaConfirmada = aulasConfirmadasIds.includes(aula.idAula);
+
+              return (
+                <Link
+                  to={`/confirmar-aula/${aula.idAula}`}
+                  key={aula.idAula}
+                  className="class-card-link"
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <div className="class-card">
+                    <div className="time-block">
+                      <Clock size={16} />
+                      <span>{horarioFormatado}</span>
+                    </div>
+
+                    <div className="class-info">
+                      <h3>{aula.titulo}</h3>
+                      <p>
+                        {aula.local?.nome} - Prof. {aula.nomeProfessor}
+                      </p>
+
+                      <span className={`class-badge ${jaConfirmada ? 'badge-sucesso' : 'badge-vagas'}`}>
+                        {jaConfirmada ? 'Confirmada' : 'Agendar vaga'}
+                      </span>
+                    </div>
                   </div>
-                  <h1 className="agenda-title">AULAS DE HOJE</h1>
-               </div>
-            </header>
-            {/* Conteúdo Principal */}
-            <section className="agenda-content">
-               {/* Seletor de Dias da Semana */}
-               <div className="week-selector">
-                  {diasSemana.map((dia, index) => (
-                     <div
-                        key={index}
-                        className={`day-card ${diaAtivoISO === dia.dataCompletaISO ? 'active' : ''}`}
-                        onClick={() => setDiaAtivoISO(dia.dataCompletaISO)}
-                     >
-                        <span className="day-str">{dia.sigla}</span>
-                        <span className="day-num">{dia.data}</span>
-                     </div>
-                  ))}
-               </div>
-               {/* Data Atual por extenso */}
-               <div className="current-date-label">
-                  <CalendarIcon size={20} />
-                  <span>{dataExtensa}</span>
-               </div>
-               {/* Lista de Aulas */}
-               <div className="class-list">
-                  {aulasHoje.map((aula, index) => (
-                     <Link to="/confirmar-aula" key={index} className="class-card-link">
-                        <div className="class-card">
-                           <div className="time-block">
-                              <Clock size={16} />
-                              <span>{aula.horario}</span>
-                           </div>
-                           <div className="class-info">
-                              <h3>{aula.titulo}</h3>
-                              <p>{aula.local}</p>
-                              <span className={`class-badge badge-${aula.tipoBadge}`}>
-                                 {aula.badge}
-                              </span>
-                           </div>
-                        </div>
-                     </Link>
-                  ))}
+                </Link>
+              );
+            })
+          )}
 
-               </div>
+          {!carregando && aulasDoDia.length === 0 && (
+            <p style={{ textAlign: 'center', color: '#64748B', padding: '24px 0', fontWeight: 500 }}>
+              Nenhuma aula programada para este dia.
+            </p>
+          )}
+        </div>
 
+        {/* Botão de Ação Fixo */}
+        <div className="book-button-wrapper">
+          <Button
+            text="AGENDAR AULA PRESENCIAL"
+            icon={<MapPin size={20} />}
+            type="button"
+            link="/agendar-aula"
+          />
+        </div>
+      </section>
 
-
-               {/* Botão de Ação Fixo */}
-
-               <div className="book-button-wrapper">
-
-                  <Button
-                     text="AGENDAR AULA PRESENCIAL"
-                     icon={<MapPin size={20} />}
-                     type="button"
-                     link="/agendar-aula"
-                  />
-               </div>
-            </section>
-            {/* Barra de Navegação Inferior - Com a prop "agenda" ativa */}
-            <MenuBar activePage="agenda" />
-         </main>
-      </>
-   );
+      {/* Barra de Navegação Inferior */}
+      <MenuBar activePage="agenda" />
+    </main>
+  );
 }

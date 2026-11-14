@@ -1,51 +1,46 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Search, 
   SlidersHorizontal, 
   Play, 
   ChevronRight,
-  MonitorPlay // Ícone que representa os exercícios gravados
+  MonitorPlay
 } from 'lucide-react';
 import MenuBar from '../../components/menu-bar/menuBar';
+import { listarExercicios } from '../../API/apiExercicio';
+import type { DadosListagemExercicio } from '../../types/exercicio';
 import './video.css';
 
 export default function Videos() {
   const [busca, setBusca] = useState('');
   const [categoriaAtiva, setCategoriaAtiva] = useState('Todos');
+  const [videos, setVideos] = useState<DadosListagemExercicio[]>([]);
+  const [carregando, setCarregando] = useState(true);
 
   const categorias = ['Todos', 'Sentado', 'Em pé'];
 
-  // Dados estáticos baseados no protótipo do Figma
-  const videosDados = [
-    {
-      id: 1,
-      titulo: 'Alongamento para começar o dia',
-      detalhes: '12 min - Nível leve',
-      badge: 'MAIS ASSISTIDO',
-      categoria: 'Em pé',
-      imagemUrl: 'https://images.unsplash.com/photo-1576678927484-cc907957088c?auto=format&fit=crop&q=80&w=800'
-    },
-    {
-      id: 2,
-      titulo: 'Fortaleça pernas e equilíbrio',
-      detalhes: '18 min - Com apoio de cadeira',
-      badge: 'RECOMENDADO',
-      categoria: 'Sentado',
-      imagemUrl: 'https://images.unsplash.com/photo-1552674605-15cff24c00e2?auto=format&fit=crop&q=80&w=800'
-    }
-  ];
+  useEffect(() => {
+    listarExercicios()
+      .then((dados) => {
+        const ativos = dados.filter((ex) => ex.status === 'ATIVO');
+        setVideos(ativos);
+      })
+      .catch((error) => console.error('Erro ao buscar exercícios:', error))
+      .finally(() => setCarregando(false));
+  }, []);
 
-  // Lógica de Filtro Duplo (Texto da Busca + Categoria)
-  const videosFiltrados = videosDados.filter((video) => {
+  // Lógica de Filtro Duplo (Texto da Busca + Categoria/Nível)
+  const videosFiltrados = videos.filter((video) => {
     const passaNaBusca = video.titulo.toLowerCase().includes(busca.toLowerCase());
-    const passaNaCategoria = categoriaAtiva === 'Todos' || video.categoria === categoriaAtiva;
+    const passaNaCategoria =
+      categoriaAtiva === 'Todos' ||
+      video.nivelDificuldade?.toLowerCase() === categoriaAtiva.toLowerCase();
     return passaNaBusca && passaNaCategoria;
   });
 
   return (
     <main className="app-container videos-container">
-      
       {/* Cabeçalho */}
       <header className="videos-header">
         <div className="videos-title-wrapper">
@@ -57,14 +52,13 @@ export default function Videos() {
       </header>
 
       <section className="videos-content">
-        
         {/* Barra de Pesquisa e Filtros */}
         <div className="search-filter-container">
           <div className="search-bar">
             <Search size={20} className="search-icon-left" />
-            <input 
-              type="text" 
-              placeholder="Buscar exercício" 
+            <input
+              type="text"
+              placeholder="Buscar exercício"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
               className="search-input"
@@ -88,50 +82,56 @@ export default function Videos() {
 
         {/* Lista de Vídeos */}
         <div className="video-list">
-          {videosFiltrados.map((video) => (
-            <Link 
-              key={video.id} 
-              to={`/video/${video.id}`} // Exemplo de rota para assistir ao vídeo
-              className="video-card"
-            >
-              {/* Thumbnail (Imagem de capa) */}
-              <div 
-                className="video-thumbnail" 
-                style={{ backgroundImage: `url(${video.imagemUrl})` }}
+          {carregando ? (
+            <p style={{ textAlign: 'center', color: '#64748B', padding: '24px 0' }}>
+              Carregando exercícios...
+            </p>
+          ) : (
+            videosFiltrados.map((video) => (
+              <Link
+                key={video.idExercicio}
+                to={`/video/${video.idExercicio}`}
+                className="video-card"
               >
-                <div className="thumbnail-overlay"></div>
-                <span className="video-badge">{video.badge}</span>
-                
-                {/* Botão Play circular na imagem */}
-                <div className="play-button-circle">
-                  <Play size={20} fill="currentColor" className="play-icon" />
-                </div>
-              </div>
-              
-              {/* Informações do Vídeo */}
-              <div className="video-info">
-                <div className="video-texts">
-                  <h3>{video.titulo}</h3>
-                  <p>{video.detalhes}</p>
-                </div>
-                <ChevronRight size={20} className="video-chevron" />
-              </div>
-            </Link>
-          ))}
+                {/* Thumbnail gerada diretamente do ID do YouTube salvo no banco */}
+                <div
+                  className="video-thumbnail"
+                  style={{
+                    backgroundImage: `url(https://img.youtube.com/vi/${video.url}/hqdefault.jpg)`,
+                  }}
+                >
+                  <div className="thumbnail-overlay"></div>
+                  <span className="video-badge">
+                    {video.nivelDificuldade?.toUpperCase() || 'EXERCÍCIO'}
+                  </span>
 
-          {/* Estado Vazio (se a busca não encontrar nada) */}
-          {videosFiltrados.length === 0 && (
+                  <div className="play-button-circle">
+                    <Play size={20} fill="currentColor" className="play-icon" />
+                  </div>
+                </div>
+
+                {/* Informações do Vídeo */}
+                <div className="video-info">
+                  <div className="video-texts">
+                    <h3>{video.titulo}</h3>
+                    <p>{video.descricao}</p>
+                  </div>
+                  <ChevronRight size={20} className="video-chevron" />
+                </div>
+              </Link>
+            ))
+          )}
+
+          {/* Estado Vazio */}
+          {!carregando && videosFiltrados.length === 0 && (
             <div className="empty-state">
               <p>Nenhum exercício encontrado para "{busca}".</p>
             </div>
           )}
         </div>
-
       </section>
 
-      {/* Barra de Navegação Inferior configurada para "Vídeos" */}
       <MenuBar activePage="videos" />
-
     </main>
   );
 }

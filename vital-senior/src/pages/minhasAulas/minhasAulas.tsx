@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ChevronLeft, 
@@ -9,60 +9,68 @@ import {
   XCircle
 } from 'lucide-react';
 import MenuBar from '../../components/menu-bar/menuBar';
+import { listarAgendamentosPorAluno, cancelarAgendamento } from '../../API/apiAgendamento';
+import type { DadosListagemAgendamento } from '../../types/agendamento';
 import './minhasAulas.css';
 
 export default function MinhasAulas() {
   const [abaAtiva, setAbaAtiva] = useState<'proximas' | 'historico'>('proximas');
+  const [agendamentos, setAgendamentos] = useState<DadosListagemAgendamento[]>([]);
+  const [carregando, setCarregando] = useState(true);
 
-  // Mock de dados simulando o retorno da sua API do Spring Boot
-  const agendamentos = {
-    proximas: [
-      {
-        id: 101,
-        titulo: 'Alongamento no parque',
-        data: 'Qua, 14 de Outubro',
-        horario: '09:00',
-        local: 'Parque da Aclimação',
-        status: 'Confirmada',
-        corStatus: 'sucesso' // Verde
-      },
-      {
-        id: 102,
-        titulo: 'Fortalecimento',
-        data: 'Sex, 16 de Outubro',
-        horario: '10:30',
-        local: 'Online ao vivo',
-        status: 'Confirmada',
-        corStatus: 'sucesso'
-      }
-    ],
-    historico: [
-      {
-        id: 99,
-        titulo: 'Equilíbrio e postura',
-        data: 'Seg, 12 de Outubro',
-        horario: '11:00',
-        local: 'Praça das Flores',
-        status: 'Concluída',
-        corStatus: 'neutro' // Cinzento
-      },
-      {
-        id: 98,
-        titulo: 'Caminhada orientada',
-        data: 'Sex, 09 de Outubro',
-        horario: '16:00',
-        local: 'Parque Ibirapuera',
-        status: 'Faltou',
-        corStatus: 'alerta' // Vermelho/Laranja
-      }
-    ]
+  const carregarAgendamentos = () => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      setCarregando(false);
+      return;
+    }
+
+    setCarregando(true);
+    listarAgendamentosPorAluno(Number(userId))
+      .then((dados) => setAgendamentos(dados))
+      .catch((error) => console.error('Erro ao buscar agendamentos:', error))
+      .finally(() => setCarregando(false));
   };
 
-  const listaAtual = abaAtiva === 'proximas' ? agendamentos.proximas : agendamentos.historico;
+  useEffect(() => {
+    carregarAgendamentos();
+  }, []);
+
+  const handleCancelar = async (idAgendamento: number) => {
+    if (!window.confirm('Deseja realmente cancelar este agendamento?')) return;
+
+    try {
+      await cancelarAgendamento(idAgendamento);
+      carregarAgendamentos();
+    } catch (error) {
+      console.error('Erro ao cancelar:', error);
+      alert('Não foi possível cancelar o agendamento.');
+    }
+  };
+
+  // Separa automaticamente os agendamentos do backend entre Próximas e Histórico
+  const agora = new Date();
+
+  const proximas = agendamentos
+    .filter(
+      (ag) =>
+        new Date(ag.aula.dataHoraInicio) >= agora &&
+        ag.statusAgendamento === 'CONFIRMADO'
+    )
+    .sort((a, b) => a.aula.dataHoraInicio.localeCompare(b.aula.dataHoraInicio));
+
+  const historico = agendamentos
+    .filter(
+      (ag) =>
+        new Date(ag.aula.dataHoraInicio) < agora ||
+        ag.statusAgendamento !== 'CONFIRMADO'
+    )
+    .sort((a, b) => b.aula.dataHoraInicio.localeCompare(a.aula.dataHoraInicio));
+
+  const listaAtual = abaAtiva === 'proximas' ? proximas : historico;
 
   return (
     <main className="app-container minhas-aulas-container">
-      
       {/* Cabeçalho */}
       <header className="minhas-aulas-header">
         <Link to="/home" className="back-link">
@@ -74,7 +82,6 @@ export default function MinhasAulas() {
 
       {/* Conteúdo Principal */}
       <section className="minhas-aulas-content">
-        
         <div className="header-icon-title">
           <div className="title-icon-wrapper">
             <CalendarCheck size={26} strokeWidth={2.5} />
@@ -84,70 +91,106 @@ export default function MinhasAulas() {
 
         {/* Seletor de Abas (Pílulas) */}
         <div className="tabs-container">
-          <button 
+          <button
             className={`tab-pill ${abaAtiva === 'proximas' ? 'active' : ''}`}
             onClick={() => setAbaAtiva('proximas')}
           >
-            Próximas
+            Próximas ({proximas.length})
           </button>
-          <button 
+          <button
             className={`tab-pill ${abaAtiva === 'historico' ? 'active' : ''}`}
             onClick={() => setAbaAtiva('historico')}
           >
-            Histórico
+            Histórico ({historico.length})
           </button>
         </div>
 
         {/* Lista de Agendamentos */}
         <div className="agendamentos-list">
-          {listaAtual.map((aula) => (
-            <div key={aula.id} className="agendamento-card">
-              
-              {/* Bloco de Data/Hora à esquerda */}
-              <div className="date-time-block">
-                <span className="date-day">{aula.data.split(' ')[0].replace(',', '')}</span>
-                <span className="date-num">{aula.data.split(' ')[1]}</span>
-              </div>
+          {carregando ? (
+            <p style={{ textAlign: 'center', color: '#64748B', padding: '24px 0' }}>
+              Carregando seus agendamentos...
+            </p>
+          ) : (
+            listaAtual.map((ag) => {
+              const dataObj = new Date(ag.aula.dataHoraInicio);
+              const diaSemana = dataObj
+                .toLocaleDateString('pt-BR', { weekday: 'short' })
+                .replace('.', '');
+              const diaNum = dataObj.getDate();
+              const mesExtenso = dataObj.toLocaleDateString('pt-BR', { month: 'long' });
+              const horario = dataObj.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit',
+              });
 
-              {/* Informações da Aula */}
-              <div className="agendamento-info">
-                <h3>{aula.titulo}</h3>
-                
-                <div className="info-row">
-                  <Clock size={14} className="info-icon" />
-                  <span>{aula.data.split(',')[1]} às {aula.horario}</span>
-                </div>
-                
-                <div className="info-row">
-                  <MapPin size={14} className="info-icon" />
-                  <span>{aula.local}</span>
-                </div>
+              const isCancelado = ag.statusAgendamento === 'CANCELADO';
+              const badgeClass = isCancelado
+                ? 'badge-alerta'
+                : abaAtiva === 'proximas'
+                ? 'badge-sucesso'
+                : 'badge-neutro';
 
-                <div className="agendamento-footer">
-                  <span className={`status-badge badge-${aula.corStatus}`}>
-                    {aula.status}
-                  </span>
-                  
-                  {/* Se for uma aula futura, pode mostrar um ícone para cancelar ou ver detalhes */}
-                  {abaAtiva === 'proximas' ? (
-                     <button className="cancel-btn" aria-label="Cancelar agendamento">
-                       <XCircle size={20} />
-                     </button>
-                  ) : (
-                    <ChevronRight size={20} className="history-chevron" />
-                  )}
+              return (
+                <Link to={`/minhas-aulas/avaliar/${ag.idAgendamento}`}>
+                  <div key={ag.idAgendamento} className="agendamento-card">
+                    {/* Bloco de Data à esquerda */}
+                    <div className="date-time-block">
+                      <span className="date-day">{diaSemana}</span>
+                      <span className="date-num">{diaNum}</span>
+                  </div>
+
+                  {/* Informações da Aula */}
+                  <div className="agendamento-info">
+                    <h3>{ag.aula.titulo}</h3>
+
+                    <div className="info-row">
+                      <Clock size={14} className="info-icon" />
+                      <span>
+                        {diaNum} de {mesExtenso} às {horario}
+                      </span>
+                    </div>
+
+                    <div className="info-row">
+                      <MapPin size={14} className="info-icon" />
+                      <span>{ag.aula.local?.nome}</span>
+                    </div>
+
+                    <div className="agendamento-footer">
+                      <span className={`status-badge ${badgeClass}`}>
+                        {ag.statusAgendamento}
+                      </span>
+
+                      {abaAtiva === 'proximas' ? (
+                        <button
+                          className="cancel-btn"
+                          onClick={() => handleCancelar(ag.idAgendamento)}
+                          aria-label="Cancelar agendamento"
+                          title="Cancelar agendamento"
+                        >
+                          <XCircle size={20} />
+                        </button>
+                      ) : (
+                        <ChevronRight size={20} className="history-chevron" />
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+                </Link>
+              );
+            })
+          )}
 
           {/* Estado Vazio */}
-          {listaAtual.length === 0 && (
+          {!carregando && listaAtual.length === 0 && (
             <div className="empty-state">
-              <p>Não tens nenhuma aula {abaAtiva === 'proximas' ? 'agendada' : 'no histórico'}.</p>
+              <p>
+                Você não tem nenhuma aula{' '}
+                {abaAtiva === 'proximas' ? 'agendada' : 'no histórico'}.
+              </p>
               {abaAtiva === 'proximas' && (
-                <Link to="/agenda" className="empty-state-link">
-                  Ver agenda de aulas
+                <Link to="/agendar-aula" className="empty-state-link">
+                  Ver aulas próximas
                 </Link>
               )}
             </div>
@@ -155,9 +198,7 @@ export default function MinhasAulas() {
         </div>
       </section>
 
-      {/* Barra de Navegação Inferior (pode manter ativa no Home ou criar um novo state) */}
       <MenuBar activePage="home" />
-
     </main>
   );
 }

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { 
   ChevronLeft, 
   Calendar, 
@@ -9,38 +9,102 @@ import {
 } from 'lucide-react';
 import Button from '../../components/button/button';
 import MenuBar from '../../components/menu-bar/menuBar';
+import { buscarAulaPorId } from '../../API/apiAula';
+import { cadastrarAgendamento } from '../../API/apiAgendamento';
+import type { DadosListagemAula } from '../../types/aula';
 import './confirmarAula.css';
 
 export default function ConfirmarAula() {
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  // Dados estáticos baseados no design para simular a resposta da API[cite: 5]
-  const detalhesAula = {
-    local: 'Parque da Aclimação',
-    imagemUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800',
-    nomeAula: 'Alongamento no parque',
-    diaSemana: 'Quarta-feira',
-    data: '14 de outubro',
-    horario: '09:00 às 09:45',
-    vagas: 4,
-    prof: {
-      iniciais: 'AC',
-      nome: 'Prof. Ana Costa',
-      registro: 'Fisioterapeuta - CREFITO ativo'
-    },
-    acessibilidade: 'Ponto de encontro acessível e com bancos.'
+  const [aula, setAula] = useState<DadosListagemAula | null>(null);
+  const [carregando, setCarregando] = useState(true);
+  const [enviando, setEnviando] = useState(false);
+
+  useEffect(() => {
+    if (!id) {
+      setCarregando(false);
+      return;
+    }
+
+    buscarAulaPorId(Number(id))
+      .then((dados) => setAula(dados))
+      .catch((error) => {
+        console.error('Erro ao buscar aula:', error);
+        alert('Não foi possível carregar os detalhes da aula.');
+      })
+      .finally(() => setCarregando(false));
+  }, [id]);
+
+  const handleConfirmar = async () => {
+    if (enviando || !aula) return;
+
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      alert('Sessão expirada. Faça login novamente para agendar.');
+      navigate('/login');
+      return;
+    }
+
+    setEnviando(true);
+    try {
+      await cadastrarAgendamento({
+        idAluno: Number(userId),
+        idAula: aula.idAula,
+      });
+
+      alert('Agendamento confirmado com sucesso!');
+      navigate('/minhas-aulas');
+    } catch (error: any) {
+      alert(error.message || 'Erro ao confirmar agendamento.');
+    } finally {
+      setEnviando(false);
+    }
   };
 
-  const handleConfirmar = () => {
-    // Aqui entrará a lógica de POST para a API confirmando o agendamento
-    console.log('Agendamento confirmado!');
-    // Redireciona de volta para a Agenda ou exibe um modal de sucesso
-    navigate('/agenda');
-  };
+  if (carregando) {
+    return (
+      <main className="app-container confirmar-container">
+        <p style={{ textAlign: 'center', color: '#64748B', padding: '40px 24px' }}>
+          Carregando detalhes da aula...
+        </p>
+      </main>
+    );
+  }
+
+  if (!aula) {
+    return (
+      <main className="app-container confirmar-container">
+        <p style={{ textAlign: 'center', color: '#64748B', padding: '40px 24px' }}>
+          Aula não encontrada.
+        </p>
+      </main>
+    );
+  }
+
+  // Formatações de data e hora a partir do LocalDateTime do Spring Boot
+  const dataInicioObj = new Date(aula.dataHoraInicio);
+  const dataFimObj = new Date(aula.dataHoraFinal);
+
+  const diaSemanaRaw = dataInicioObj.toLocaleDateString('pt-BR', { weekday: 'long' });
+  const diaSemana = diaSemanaRaw.charAt(0).toUpperCase() + diaSemanaRaw.slice(1);
+  const dataFormatada = dataInicioObj.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' });
+
+  const horaInicio = dataInicioObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  const horaFim = dataFimObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+  const iniciaisProf = aula.nomeProfessor
+    ? aula.nomeProfessor
+        .split(' ')
+        .map((parte) => parte[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase()
+    : 'PR';
 
   return (
     <main className="app-container confirmar-container">
-      
       {/* Cabeçalho */}
       <header className="confirmar-header">
         <Link to="/agendar-aula" className="back-link">
@@ -51,26 +115,28 @@ export default function ConfirmarAula() {
 
       {/* Conteúdo Principal (Rolável) */}
       <section className="confirmar-content">
-        
-        {/* Banner do Local Selecionado[cite: 5] */}
-        <div 
-          className="hero-banner" 
-          style={{ backgroundImage: `url(${detalhesAula.imagemUrl})` }}
+        {/* Banner do Local Selecionado */}
+        <div
+          className="hero-banner"
+          style={{
+            backgroundImage:
+              'url(https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800)',
+          }}
         >
           <div className="hero-overlay"></div>
           <span className="hero-badge">LOCAL SELECIONADO</span>
-          <h2 className="hero-title">{detalhesAula.local}</h2>
+          <h2 className="hero-title">{aula.local?.nome}</h2>
         </div>
 
-        {/* Cartão de Detalhes da Aula[cite: 5] */}
+        {/* Cartão de Detalhes da Aula */}
         <div className="details-card">
-          <h3 className="class-title">{detalhesAula.nomeAula}</h3>
-          
+          <h3 className="class-title">{aula.titulo}</h3>
+
           <div className="detail-row">
             <Calendar size={22} className="detail-icon" />
             <div className="detail-texts">
-              <span className="detail-label">{detalhesAula.diaSemana}</span>
-              <span className="detail-value">{detalhesAula.data}</span>
+              <span className="detail-label">{diaSemana}</span>
+              <span className="detail-value">{dataFormatada}</span>
             </div>
           </div>
 
@@ -78,43 +144,41 @@ export default function ConfirmarAula() {
             <Clock size={22} className="detail-icon" />
             <div className="detail-texts">
               <span className="detail-label">Horário escolhido</span>
-              <span className="detail-value">{detalhesAula.horario}</span>
+              <span className="detail-value">
+                {horaInicio} às {horaFim}
+              </span>
             </div>
-            <span className="spots-badge">{detalhesAula.vagas} vagas</span>
+            <span className="spots-badge">{aula.status}</span>
           </div>
         </div>
 
-        {/* Cartão do Profissional[cite: 5] */}
+        {/* Cartão do Profissional */}
         <div className="prof-card">
-          <div className="prof-avatar">
-            {detalhesAula.prof.iniciais}
-          </div>
+          <div className="prof-avatar">{iniciaisProf}</div>
           <div className="prof-info">
-            <h4>{detalhesAula.prof.nome}</h4>
-            <p>{detalhesAula.prof.registro}</p>
+            <h4>Prof. {aula.nomeProfessor}</h4>
+            <p>Educador Físico / Fisioterapeuta</p>
           </div>
         </div>
 
-        {/* Cartão de Acessibilidade[cite: 5] */}
+        {/* Cartão de Acessibilidade */}
         <div className="accessibility-card">
           <Accessibility size={24} className="acc-icon" />
-          <p>{detalhesAula.acessibilidade}</p>
+          <p>{aula.local?.descricao || aula.local?.logradouro}</p>
         </div>
 
-        {/* Botão de Confirmação[cite: 5] */}
+        {/* Botão de Confirmação */}
         <div className="confirm-btn-wrapper" onClick={handleConfirmar}>
-          <Button 
-            text="CONFIRMAR AGENDAMENTO" 
-            icon={<CheckCircle size={20} />} 
-            type="button" 
+          <Button
+            text={enviando ? 'CONFIRMANDO...' : 'CONFIRMAR AGENDAMENTO'}
+            icon={<CheckCircle size={20} />}
+            type="button"
           />
         </div>
-
       </section>
 
-      {/* Barra de Navegação Inferior[cite: 5] */}
+      {/* Barra de Navegação Inferior */}
       <MenuBar activePage="agenda" />
-
     </main>
   );
 }
