@@ -5,7 +5,7 @@ import Button from '../../components/button/button';
 import Input from '../../components/input/input';
 import MenuBar from '../../components/menu-bar/menuBar';
 import { cadastrarAvaliacao } from '../../API/apiAvaliacao';
-import './avaliarAula.css';
+import './AvaliarAula.css';
 
 export default function AvaliarAula() {
   const { idAgendamento } = useParams();

@@ -12,7 +12,7 @@ import MenuBar from '../../components/menu-bar/menuBar';
 import { buscarAulaPorId } from '../../API/apiAula';
 import { cadastrarAgendamento } from '../../API/apiAgendamento';
 import type { DadosListagemAula } from '../../types/aula';
-import './confirmarAula.css';
+import './ConfirmarAula.css';
 
 export default function ConfirmarAula() {
   const { id } = useParams();
