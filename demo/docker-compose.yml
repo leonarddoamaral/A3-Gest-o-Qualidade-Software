@@ -1,0 +1,62 @@
+name: vitalsenior
+
+services:
+  # Banco de dados da aplicação
+  db:
+    image: postgres:16-alpine
+    container_name: vitalsenior-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-vitalsenior}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-anima123}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Backend Spring Boot (só sobe depois que o Postgres estiver saudável)
+  backend:
+    build:
+      context: .
+    container_name: vitalsenior-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Dentro da rede do compose o host do banco é o nome do serviço ("db"), não localhost.
+      # As variáveis abaixo sobrescrevem spring.datasource.* do application.properties.
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-vitalsenior}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-anima123}
+    ports:
+      - "${APP_PORT:-8081}:8081"
+
+  # Banco descartável para os testes de integração (só sobe com: --profile test)
+  # Uso: docker compose --profile test up -d --wait db-test
+  db-test:
+    profiles: ["test"]
+    image: postgres:16-alpine
+    container_name: vitalsenior-db-test
+    environment:
+      POSTGRES_DB: vitalsenior_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-anima123}
+    ports:
+      - "5433:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d vitalsenior_test"]
+      interval: 3s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  pgdata:
