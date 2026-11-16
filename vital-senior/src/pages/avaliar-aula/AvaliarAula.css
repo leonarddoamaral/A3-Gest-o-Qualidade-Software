@@ -1,0 +1,150 @@
+.avaliar-container {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.avaliar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px 16px 24px;
+  position: relative;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.avaliar-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #004A4D;
+  letter-spacing: 0.5px;
+}
+
+.avaliar-content {
+  flex: 1;
+  padding: 24px 24px 110px 24px;
+  overflow-y: auto;
+}
+
+.avaliar-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rating-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 20px;
+  background-color: #f8fafc;
+}
+
+.rating-card h2 {
+  font-size: 17px;
+  font-weight: 800;
+  color: #004A4D;
+  margin-bottom: 4px;
+}
+
+.rating-card p {
+  font-size: 13px;
+  color: #64748B;
+  margin-bottom: 16px;
+}
+
+.stars-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 4px;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  transition: transform 0.15s ease;
+}
+
+.star-btn:active {
+  transform: scale(1.15);
+}
+
+.rating-feedback {
+  display: block;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 800;
+  color: #FF6B35;
+  margin-top: 8px;
+}
+
+.difficulty-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.diff-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 2px solid #e2e8f0;
+  background-color: #ffffff;
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.diff-pill.active {
+  border-color: #007D83;
+  background-color: #E6F7F5;
+  color: #004A4D;
+}
+
+.diff-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.diff-pill.active .diff-num {
+  background-color: #007D83;
+  color: #ffffff;
+}
+
+.textarea-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #004A4D;
+  margin-bottom: 12px;
+}
+
+.avaliar-textarea {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 14px;
+  font-size: 15px;
+  font-family: inherit;
+  resize: none;
+  background-color: #ffffff;
+}
+
+.avaliar-textarea:focus {
+  outline: none;
+  border-color: #007D83;
+}

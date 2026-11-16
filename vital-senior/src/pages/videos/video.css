@@ -1,0 +1,239 @@
+/* --- Contentor Principal --- */
+.videos-container {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Cabeçalho --- */
+.videos-header {
+  padding: 32px 24px 16px 24px;
+}
+
+.videos-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.videos-icon {
+  background-color: #E6F7F5;
+  color: #007D83;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.videos-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #004A4D;
+  letter-spacing: -0.5px;
+}
+
+/* --- Conteúdo Principal --- */
+.videos-content {
+  flex: 1;
+  padding: 0 24px 100px 24px; /* 100px para o menu inferior não sobrepor o conteúdo */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Barra de Pesquisa --- */
+.search-filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 12px 16px;
+  background-color: #ffffff;
+}
+
+.search-icon-left {
+  color: #94a3b8;
+  margin-right: 12px;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  font-family: inherit;
+  color: #0f172a;
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
+.search-icon-right {
+  color: #007D83; /* Ícone de filtro em verde escuro */
+  margin-left: 12px;
+  cursor: pointer;
+}
+
+/* --- Pílulas de Categoria (Filtros) --- */
+.category-pills {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+/* Esconde a barra de scroll horizontal nas pílulas */
+.category-pills::-webkit-scrollbar {
+  display: none;
+}
+.category-pills {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
+}
+
+.pill-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  color: #64748B;
+}
+
+.pill-btn.active {
+  background-color: #007D83;
+  color: #ffffff;
+  border-color: #007D83;
+}
+
+/* --- Lista de Vídeos --- */
+.video-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.video-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease;
+}
+
+.video-card:active {
+  transform: scale(0.98);
+}
+
+/* Thumbnail do Vídeo */
+.video-thumbnail {
+  position: relative;
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.thumbnail-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
+  z-index: 1;
+}
+
+/* Badge Laranja */
+.video-badge {
+  position: relative;
+  z-index: 2;
+  align-self: flex-start;
+  margin: 16px;
+  background-color: #FFF0E6;
+  color: #E55A2A;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+}
+
+/* Botão Play circular */
+.play-button-circle {
+  position: relative;
+  z-index: 2;
+  margin: 0 16px 16px 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.play-icon {
+  color: #FF6B35;
+  margin-left: 2px; /* Pequeno ajuste visual para o ícone de Play ficar centrado */
+}
+
+/* Informações abaixo da imagem */
+.video-info {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.video-texts {
+  flex: 1;
+  padding-right: 16px;
+}
+
+.video-texts h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.video-texts p {
+  font-size: 13px;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.video-chevron {
+  color: #007D83;
+}
+
+/* Estado vazio */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #94a3b8;
+  font-weight: 500;
+}

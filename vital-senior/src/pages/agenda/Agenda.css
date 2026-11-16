@@ -1,0 +1,196 @@
+/* --- Ajuste de Fundo da Agenda --- */
+.agenda-container {
+  background-color: #ffffff; 
+}
+
+/* --- Cabeçalho --- */
+.agenda-header {
+  padding: 32px 24px 24px 24px;
+}
+
+.agenda-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.agenda-icon {
+  background-color: #E6F7F5;
+  color: #007D83;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agenda-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #004A4D;
+  letter-spacing: -0.5px;
+}
+
+/* --- Conteúdo Principal --- */
+.agenda-content {
+  padding: 0 24px 100px 24px; /* 100px evita que o MenuBar tape o último botão */
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* --- Seletor de Dias (Semana) --- */
+.week-selector {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 20px;
+}
+
+.day-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  color: #64748B;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+/* Estado Ativo do Dia (Hoje) */
+.day-card.active {
+  background-color: #007D83;
+  border-color: #007D83;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 125, 131, 0.2);
+}
+
+.day-str {
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.day-num {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* --- Data Atual (Extenso) --- */
+.current-date-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #007D83;
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+/* --- Lista de Cartões de Aula --- */
+.class-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.class-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.class-card-link:focus-visible {
+  outline: 3px solid #007D83;
+  outline-offset: 3px;
+  border-radius: 20px;
+}
+
+.class-card {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+}
+
+.time-block {
+  background-color: #E6F7F5;
+  color: #007D83;
+  padding: 16px 12px;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 76px;
+}
+
+.time-block span {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.class-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.class-info h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.class-info p {
+  font-size: 13px;
+  color: var(--color-text-gray);
+  font-weight: 500;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+/* --- Badges de Status --- */
+.class-badge {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+/* Verde Claro (Confirmada / Vagas) */
+.badge-sucesso, .badge-vagas {
+  background-color: #E6F7F5;
+  color: #007D83;
+}
+
+/* Laranja Claro (Entrar na Aula) */
+.badge-acao {
+  background-color: #FFF0E6;
+  color: #E55A2A;
+}
+
+/* --- Espaçamento do Botão Inferior --- */
+.book-button-wrapper {
+  margin-top: auto; /* Empurra o botão para a parte inferior da zona rolável */
+  padding-bottom: 16px;
+}

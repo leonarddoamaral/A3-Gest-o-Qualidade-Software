@@ -1,0 +1,248 @@
+/* --- Contentor Principal --- */
+.minhas-aulas-container {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Cabeçalho --- */
+.minhas-aulas-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px 16px 24px;
+  position: relative;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.back-link {
+  position: absolute;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  color: #007D83;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.minhas-aulas-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #004A4D;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* --- Conteúdo Principal --- */
+.minhas-aulas-content {
+  flex: 1;
+  padding: 24px 24px 100px 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-icon-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.title-icon-wrapper {
+  background-color: #E6F7F5;
+  color: #007D83;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-icon-title h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #004A4D;
+}
+
+/* --- Abas (Pílulas) --- */
+.tabs-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  background-color: #f8fafc;
+  padding: 6px;
+  border-radius: 24px;
+}
+
+.tab-pill {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  background-color: transparent;
+  color: #64748B;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-pill.active {
+  background-color: #007D83;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 125, 131, 0.2);
+}
+
+/* --- Lista de Agendamentos (Cartões) --- */
+.agendamentos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.agendamento-card {
+  display: flex;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background-color: #ffffff;
+  padding: 16px;
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+/* Bloco Esquerdo (Data) */
+.date-time-block {
+  background-color: #E6F7F5;
+  color: #007D83;
+  min-width: 64px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+}
+
+.date-day {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.date-num {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+  margin-top: 4px;
+}
+
+/* Informações da Aula */
+.agendamento-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.agendamento-info h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748B;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.info-icon {
+  color: #94a3b8;
+}
+
+/* Rodapé do Cartão (Badge e Botões) */
+.agendamento-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.status-badge {
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.badge-sucesso {
+  background-color: #DCFCE7;
+  color: #16A34A;
+}
+
+.badge-alerta {
+  background-color: #FEE2E2;
+  color: #DC2626;
+}
+
+.badge-neutro {
+  background-color: #F1F5F9;
+  color: #64748B;
+}
+
+/* Botões do Cartão */
+.cancel-btn {
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.cancel-btn:active {
+  color: #DC2626; /* Fica vermelho ao clicar */
+}
+
+.history-chevron {
+  color: #cbd5e1;
+}
+
+/* Estado Vazio */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #64748B;
+}
+
+.empty-state p {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.empty-state-link {
+  display: inline-block;
+  background-color: #007D83;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 14px;
+}

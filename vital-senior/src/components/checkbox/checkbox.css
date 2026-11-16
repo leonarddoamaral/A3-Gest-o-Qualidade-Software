@@ -1,0 +1,24 @@
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.custom-checkbox {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  accent-color: #007D83; /* A cor verde do seu projeto */
+  flex-shrink: 0;
+}
+
+.checkbox-label {
+  font-size: 15px;
+  color: #0f172a;
+  cursor: pointer;
+  font-weight: 500;
+  user-select: none; /* Evita que o texto seja selecionado de azul ao clicar rápido */
+  line-height: 1.4;
+}

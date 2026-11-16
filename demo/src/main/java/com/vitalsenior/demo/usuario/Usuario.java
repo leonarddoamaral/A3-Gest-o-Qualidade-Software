@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Table(name= "com/vitalsenior/demo/usuario")
 @Getter
@@ -20,7 +20,7 @@ public class Usuario {
     private String email;
     private String senhaHash;
     private String telefone;
-    private Date dataNascimento ;
+    private LocalDate dataNascimento;
     private String tipoPerfil ;
 
     public Usuario(DadosCadastroUsuario dados){

@@ -1,0 +1,36 @@
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 18px 16px; /* Touch target ampliado para idosos */
+  border-radius: 16px;
+  border: 2px solid #e2e8f0;
+  background-color: #f8fafc;
+  font-size: 16px;
+  color: #0f172a;
+  font-family: var(--font-main);
+  transition: all 0.2s ease;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.15);
+}
+
+.input-group input::placeholder {
+  color: #94a3b8;
+  font-weight: 500;
+}
